@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+‎<html lang="fr">
+‎<head>
+‎    <meta charset="UTF-8">
+‎    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+‎    <title>WhatsApp Human Bot</title>
+‎    <style>
+‎        * { margin: 0; padding: 0; box-sizing: border-box; }
+‎        body {
+‎            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+‎            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+‎            color: #fff;
+‎            padding: 20px;
+‎            min-height: 100vh;
+‎            display: flex;
+‎            justify-content: center;
+‎            align-items: center;
+‎        }
+‎        .container {
+‎            max-width: 400px;
+‎            text-align: center;
+‎        }
+‎        h1 { margin-bottom: 20px; font-size: 24px; }
+‎        .status {
+‎            padding: 20px;
+‎            border-radius: 15px;
+‎            margin-bottom: 20px;
+‎            font-weight: bold;
+‎        }
+‎        .online { background: #00d26a; color: #000; }
+‎        .offline { background: #e94560; }
+‎        .connecting { background: #ffd700; color: #000; }
+‎        .qr-box {
+‎            background: #fff;
+‎            color: #000;
+‎            padding: 30px;
+‎            border-radius: 15px;
+‎        }
+‎        .qr-box img { max-width: 250px; margin-top: 15px; }
+‎        .hidden { display: none !important; }
+‎    </style>
+‎</head>
+‎<body>
+‎    <div class="container">
+‎        <h1>🤖 WhatsApp Human Bot</h1>
+‎        <div id="status" class="status offline">⏳ Chargement...</div>
+‎        <div id="qr-section" class="qr-box hidden">
+‎            <h2>📱 Scan ce QR Code</h2>
+‎            <p>WhatsApp → Paramètres → Appareils connectés</p>
+‎            <img id="qr-img" alt="QR Code">
+‎        </div>
+‎    </div>
+‎
+‎    <script src="/socket.io/socket.io.js"></script>
+‎    <script>
+‎        const socket = io();
+‎        
+‎        socket.on('qr', (qr) => {
+‎            document.getElementById('status').className = 'status connecting';
+‎            document.getElementById('status').textContent = '⏳ En attente QR...';
+‎            document.getElementById('qr-section').classList.remove('hidden');
+‎            document.getElementById('qr-img').src = qr;
+‎        });
+‎        
+‎        socket.on('connected', () => {
+‎            document.getElementById('status').className = 'status online';
+‎            document.getElementById('status').textContent = '✅ Connecté - Tout est sur Telegram';
+‎            document.getElementById('qr-section').classList.add('hidden');
+‎        });
+‎    </script>
+‎</body>
+‎</html>
